@@ -159,7 +159,9 @@ func Print(name string, m map[uint32][]string, isPrint bool) {
 	for k, vs := range m {
 		i++
 		n := len(m[k])
-		s += fmt.Sprintf("%2d,", n)
+		if isPrint {
+			s += fmt.Sprintf("%2d,", n)
+		}
 		if i > 0 && i%50 == 0 {
 			if isPrint {
 				fmt.Println(s)

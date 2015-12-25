@@ -223,37 +223,37 @@ func Wukehong(data []byte) uint32 {
 
 	p := uintptr(bh.Data)
 	for ; dlen >= _DDWSZ; dlen -= _DDWSZ {
-		k1 := *(*uint64)(unsafe.Pointer(p))
-		k2 := *(*uint64)(unsafe.Pointer(p + 4))
-		h32 = uint32((uint64(h32) ^ ((k1<<5 | k1>>27) ^ k2)) * _YP32)
+		k1 := (*uint64)(unsafe.Pointer(p))
+		k2 := (*uint64)(unsafe.Pointer(p + 4))
+		h32 = uint32((uint64(h32) ^ ((*k1<<5 | *k1>>27) ^ *k2)) * _YP32)
 		p += _DDWSZ
 	}
 
 	// Cases: 8
 	if (dlen & _DWSZ) > 0 {
-		k1 := *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 := (*uint64)(unsafe.Pointer(p))
+		h32 = uint32(uint64(h32)^*k1) * _YP32
 		p += _WSZ
-		k1 = *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 = (*uint64)(unsafe.Pointer(p))
+		h32 = uint32(uint64(h32)^*k1) * _YP32
 		p += _WSZ
 	}
 	// Cases: 4
 	if (dlen & _WSZ) > 0 {
-		k1 := *(*uint32)(unsafe.Pointer(p))
-		h32 = (h32 ^ k1) * _YP32
+		k1 := (*uint32)(unsafe.Pointer(p))
+		h32 = (h32 ^ *k1) * _YP32
 		p += _WSZ
 	}
 	// Cases: 2
 	if (dlen & _DSZ) > 0 {
-		k1 := *(*uint16)(unsafe.Pointer(p))
-		h32 = (h32 ^ uint32(k1)) * _YP32
+		k1 := (*uint16)(unsafe.Pointer(p))
+		h32 = (h32 ^ uint32(*k1)) * _YP32
 		p += _DSZ
 	}
 	// Cases: 1
 	if (dlen & 1) > 0 {
-		k1 := *(*byte)(unsafe.Pointer(p))
-		h32 = (h32 ^ uint32(k1)) * _YP32
+		k1 := (*byte)(unsafe.Pointer(p))
+		h32 = (h32 ^ uint32(*k1)) * _YP32
 	}
 	return h32 ^ (h32 >> 16)
 }
@@ -266,38 +266,39 @@ func WukehongS(s string) uint32 {
 
 	p := uintptr(sh.Data)
 	for ; dlen >= _DDWSZ; dlen -= _DDWSZ {
-		k1 := *(*uint64)(unsafe.Pointer(p))
-		k2 := *(*uint64)(unsafe.Pointer(p + 4))
-		h32 = uint32((uint64(h32) ^ ((k1<<5 | k1>>27) ^ k2)) * _YP32)
+		k1 := (*uint64)(unsafe.Pointer(p))
+		k2 := (*uint64)(unsafe.Pointer(p + 4))
+		h32 = uint32((uint64(h32) ^ ((*k1<<5 | *k1>>27) ^ *k2)) * _YP32)
 		p += _DDWSZ
 	}
 
 	// Cases: 8
 	if (dlen & _DWSZ) > 0 {
-		k1 := *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 := (*uint64)(unsafe.Pointer(p))
+		h32 = uint32(uint64(h32)^*k1) * _YP32
 		p += _WSZ
-		k1 = *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 = (*uint64)(unsafe.Pointer(p))
+		h32 = uint32(uint64(h32)^*k1) * _YP32
 		p += _WSZ
 	}
 	// Cases: 4
 	if (dlen & _WSZ) > 0 {
-		k1 := *(*uint32)(unsafe.Pointer(p))
-		h32 = (h32 ^ k1) * _YP32
+		k1 := (*uint32)(unsafe.Pointer(p))
+		h32 = (h32 ^ *k1) * _YP32
 		p += _WSZ
 	}
 	// Cases: 2
 	if (dlen & _DSZ) > 0 {
-		k1 := *(*uint16)(unsafe.Pointer(p))
-		h32 = (h32 ^ uint32(k1)) * _YP32
+		k1 := (*uint16)(unsafe.Pointer(p))
+		h32 = (h32 ^ uint32(*k1)) * _YP32
 		p += _DSZ
 	}
 	// Cases: 1
 	if (dlen & 1) > 0 {
-		k1 := *(*byte)(unsafe.Pointer(p))
-		h32 = (h32 ^ uint32(k1)) * _YP32
+		k1 := (*byte)(unsafe.Pointer(p))
+		h32 = (h32 ^ uint32(*k1)) * _YP32
 	}
+
 	return h32 ^ (h32 >> 16)
 }
 
