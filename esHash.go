@@ -283,8 +283,8 @@ func WukehongS(s string) uint32 {
 	}
 	// Cases: 4
 	if (dlen & _WSZ) > 0 {
-		k1 := (*uint32)(unsafe.Pointer(p))
-		h32 = (h32 ^ *k1) * _YP32
+		k1 := *(*uint32)(unsafe.Pointer(p))
+		h32 = (h32 ^ k1) * _YP32
 		p += _WSZ
 	}
 	// Cases: 2
