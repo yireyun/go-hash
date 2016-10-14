@@ -160,11 +160,11 @@ func Meiyan(data []byte) uint32 {
 
 	// Cases: 0,1,2,3,4,5,6,7
 	if (dlen & _DWSZ) > 0 {
-		k1 := *(*uint64)(unsafe.Pointer(&data[i]))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 := *(*uint32)(unsafe.Pointer(&data[i]))
+		h32 = uint32(h32^k1) * _YP32
 		i += _WSZ
-		k1 = *(*uint64)(unsafe.Pointer(&data[i]))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 = *(*uint32)(unsafe.Pointer(&data[i]))
+		h32 = uint32(h32^k1) * _YP32
 		i += _WSZ
 	}
 	if (dlen & _WSZ) > 0 {
@@ -196,11 +196,11 @@ func MeiyanS(s string) uint32 {
 
 	// Cases: 0,1,2,3,4,5,6,7
 	if (dlen & _DWSZ) > 0 {
-		k1 := *(*uint64)(unsafe.Pointer(&data[i]))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 := *(*uint32)(unsafe.Pointer(&data[i]))
+		h32 = uint32(h32^k1) * _YP32
 		i += _WSZ
-		k1 = *(*uint64)(unsafe.Pointer(&data[i]))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 = *(*uint32)(unsafe.Pointer(&data[i]))
+		h32 = uint32(h32^k1) * _YP32
 		i += _WSZ
 	}
 	if (dlen & _WSZ) > 0 {
@@ -215,8 +215,8 @@ func MeiyanS(s string) uint32 {
 }
 
 // Wukehong fork form Meiyan
-func Wukehong(data []byte) uint32 {
-	bh := (*reflect.SliceHeader)(unsafe.Pointer(&data))
+func Wukehong(d []byte) uint32 {
+	bh := (*reflect.SliceHeader)(unsafe.Pointer(&d))
 
 	h32 := uint32(_OFF32)
 	dlen := bh.Len
@@ -224,18 +224,18 @@ func Wukehong(data []byte) uint32 {
 	p := uintptr(bh.Data)
 	for ; dlen >= _DDWSZ; dlen -= _DDWSZ {
 		k1 := *(*uint64)(unsafe.Pointer(p))
-		k2 := *(*uint64)(unsafe.Pointer(p + 4))
+		k2 := *(*uint64)(unsafe.Pointer(p + _DWSZ))
 		h32 = uint32((uint64(h32) ^ ((k1<<5 | k1>>27) ^ k2)) * _YP32)
 		p += _DDWSZ
 	}
 
 	// Cases: 8
 	if (dlen & _DWSZ) > 0 {
-		k1 := *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 := *(*uint32)(unsafe.Pointer(p))
+		h32 = uint32(h32^k1) * _YP32
 		p += _WSZ
-		k1 = *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 = *(*uint32)(unsafe.Pointer(p))
+		h32 = uint32(h32^k1) * _YP32
 		p += _WSZ
 	}
 	// Cases: 4
@@ -267,18 +267,18 @@ func WukehongS(s string) uint32 {
 	p := uintptr(sh.Data)
 	for ; dlen >= _DDWSZ; dlen -= _DDWSZ {
 		k1 := *(*uint64)(unsafe.Pointer(p))
-		k2 := *(*uint64)(unsafe.Pointer(p + 4))
+		k2 := *(*uint64)(unsafe.Pointer(p + _DWSZ))
 		h32 = uint32((uint64(h32) ^ ((k1<<5 | k1>>27) ^ k2)) * _YP32)
 		p += _DDWSZ
 	}
 
 	// Cases: 8
 	if (dlen & _DWSZ) > 0 {
-		k1 := *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 := *(*uint32)(unsafe.Pointer(p))
+		h32 = uint32(h32^k1) * _YP32
 		p += _WSZ
-		k1 = *(*uint64)(unsafe.Pointer(p))
-		h32 = uint32(uint64(h32)^k1) * _YP32
+		k1 = *(*uint32)(unsafe.Pointer(p))
+		h32 = uint32(h32^k1) * _YP32
 		p += _WSZ
 	}
 	// Cases: 4
